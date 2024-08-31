@@ -7,12 +7,35 @@
     <title>書店首頁</title>
     <style>
         body {
-            background-color: aliceblue;
+            /* background-color: aliceblue; */
             text-align: center;
         }
 
         .price {
-            color: chocolate;
+            background-color: rgb(165, 101, 224);
+            color: aliceblue;
+            padding: 12px;
+            margin: 6px 0px;
+        }
+
+        .bookname {
+            font-size: 20px;
+            font-weight: bold;
+            background-color: aqua;
+            width: 200px;
+            margin: 0 auto;
+            border-radius: 12px;
+            padding: 12px 0px;
+        }
+
+        .bookimg {
+            width: 250px;
+            border-radius: 12px;
+            border: 1px black solid;
+            padding: 6px 0px;
+            display: block;
+            margin: 6px auto;
+
         }
     </style>
 </head>
@@ -22,10 +45,11 @@
     <!-- {{bks}} -->
     {% for key in bks %}
     <!-- {{bks[key].name}} == {{bks[key]["name"]}} -->
-    <h2>{{bks[key].name}}</h2>
+    <div class="bookname">{{bks[key].name}}</div>
     <div class="price">NT$ {{bks[key].price}}</div>
     <!-- 輸出圖片連結 -->
-    <img src="{{bks[key].image_url}}" alt="">
+    <img class="bookimg" src="{{bks[key].image_url}}" alt="">
+    <button>購買</button>
     <hr>
     {% endfor %}
 
