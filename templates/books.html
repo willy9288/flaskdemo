@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>書店首頁</title>
+    <style>
+        body {
+            background-color: aliceblue;
+            text-align: center;
+        }
+
+        .price {
+            color: chocolate;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>目前書籍</h1>
+    <!-- {{bks}} -->
+    {% for key in bks %}
+    <!-- {{bks[key].name}} == {{bks[key]["name"]}} -->
+    <h2>{{bks[key].name}}</h2>
+    <div class="price">NT$ {{bks[key].price}}</div>
+    <!-- 輸出圖片連結 -->
+    <img src="{{bks[key].image_url}}" alt="">
+    <hr>
+    {% endfor %}
+
+</body>
+
+</html>
