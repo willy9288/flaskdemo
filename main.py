@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from datetime import datetime
+from scrape import scrape_stocks
 
 # print(__name__)
 
@@ -72,6 +73,14 @@ def get_bmi(nm, h, w):
     except Exception as e:
         print(e)
     return "<h2>參數不正確!</h2>"
+
+
+@app.route("/stocks")
+def get_stocks():
+    datas = scrape_stocks()
+    # for data in datas:
+    #     print(data[0], data[1])
+    return render_template("stocks.html", dts=datas)
 
 
 app.run(debug=True)
