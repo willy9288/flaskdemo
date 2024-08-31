@@ -26,12 +26,12 @@
 
 <body>
     <h1>今年以來主要股市漲跌幅</h1>
+    <a href="/stocks">更新</a>
     <!-- {{dts}} -->
-    {% if stocks %}
-
+    {% if dts %}
     {% for data in dts[1:] %}
     <!-- {{data[0]}}, {{data[1]}} -->
-    <div class="stocks">{{data.0}}, {{data.1}}</div>
+    <div class="stocks">{{data.0}} {{data.1}}</div>
     {% endfor %}
 
     {% else %}
