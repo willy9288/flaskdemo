@@ -32,6 +32,29 @@
                 width: 90%;
             }
         }
+
+        #reload-sec {
+            width: 50px;
+        }
+
+        .panel1 {
+            width: 200px;
+            margin: 3px auto;
+            background-color: bisque;
+            padding: 6px;
+            border-radius: 3px;
+        }
+
+        .bttn-styl {
+            background-color: cornflowerblue;
+            border: 0;
+            width: 50px;
+            border-radius: 3px;
+        }
+
+        form {
+            margin: 6px 0px;
+        }
     </style>
 </head>
 
@@ -40,13 +63,17 @@
     <h3>目前時間:{{dt["today"]}}</h3>
     <a href="/">Home</a>
     <a href="">Refresh</a>
-    <form action="" method="POST">
-        <select name="sort" id="sort">
-            <option value="true">由小到大</option>
-            <option value="false">由大到小</option>
-        </select>
-        <button type="submit">排序</button>
-    </form>
+    <div class="panel1">
+        <input type="checkbox" name="check-reload" id="check-reload"><br>開啟
+        <input type="number" name="reload-sec" id="reload-sec"><br>秒數
+        <form action="" method="POST">
+            <select name="sort" id="sort">
+                <option value="true">由小到大</option>
+                <option value="false">由大到小</option>
+            </select>
+            <button class="bttn-styl" type="submit">排序</button>
+        </form>
+    </div>
 
     <table border="1">
         <thead>
@@ -69,6 +96,58 @@
 
     <!-- {{dt["columns"]}} -->
     <!-- {{dt["values"]}} -->
+
+    <script>
+        // const sortBtn = document.querySelector("button");
+        const checkReload = document.querySelector("#check-reload");
+        const reloadSec = document.querySelector("#reload-sec");
+        // console.log(sortBtn);
+        // console.log(checkReload, reloadSec);
+        const delaySec = 30;
+        reloadSec.value = delaySec;
+
+        window.onload = function () {
+            // console.log(checkReload, reloadSec);
+
+            // 讀取
+            checkReload.checked = localStorage.getItem("CheckReload") ? true : false;
+            reloadSec.value = localStorage.getItem("ReloadSec") ? localStorage.getItem("ReloadSec") : delaySec;
+
+            // if (localStorage.getItem("CheckReload")) {
+            //     checkReload.checked = localStorage.getItem("CheckReload");
+            // };
+
+            // if (localStorage.getItem("ReloadSec")) {
+            //     reloadSec.value = localStorage.getItem("ReloadSec");
+            // };
+
+            setUpdateInterval()
+
+        };
+
+
+        checkReload.addEventListener("change", () => {
+            // console.log(checkReload.checked, reloadSec.value);
+
+            // 儲存
+            localStorage.setItem("CheckReload", checkReload.checked);
+            localStorage.setItem("ReloadSec", reloadSec.value);
+
+
+        });
+
+        function setUpdateInterval() {
+            if (checkReload.checked) {
+                console.log("start reload!!!!");
+                let sec = Number(reloadSec.value) * 1000;
+                setInterval((() => {
+                    window.location.reload();
+                }), sec);
+            };
+        };
+
+
+    </script>
 
 </body>
 
