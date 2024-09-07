@@ -32,6 +32,29 @@
                 width: 90%;
             }
         }
+
+        #reload-sec {
+            width: 50px;
+        }
+
+        .panel1 {
+            width: 200px;
+            margin: 3px auto;
+            background-color: bisque;
+            padding: 6px;
+            border-radius: 3px;
+        }
+
+        .bttn-styl {
+            background-color: cornflowerblue;
+            border: 0;
+            width: 50px;
+            border-radius: 3px;
+        }
+
+        form {
+            margin: 6px 0px;
+        }
     </style>
 </head>
 
@@ -39,6 +62,19 @@
     <h1>全省 PM 2.5資訊</h1>
     <h3>目前時間:{{dt["today"]}}</h3>
     <a href="/">Home</a>
+    <a href="">Refresh</a>
+    <div class="panel1">
+        <input type="checkbox" name="check-reload" id="check-reload"><br>開啟
+        <input type="number" name="reload-sec" id="reload-sec"><br>秒數
+        <form action="" method="POST">
+            <select name="sort" id="sort">
+                <option value="true">由小到大</option>
+                <option value="false">由大到小</option>
+            </select>
+            <button class="bttn-styl" type="submit">排序</button>
+        </form>
+    </div>
+
     <table border="1">
         <thead>
             <tr>
@@ -60,6 +96,70 @@
 
     <!-- {{dt["columns"]}} -->
     <!-- {{dt["values"]}} -->
+
+    <script>
+        // const sortBtn = document.querySelector("button");
+        const checkReload = document.querySelector("#check-reload");
+        const reloadSec = document.querySelector("#reload-sec");
+        // console.log(sortBtn);
+        // console.log(checkReload, reloadSec);
+        const delaySec = 30;
+        // reloadSec.value = delaySec;
+
+        window.onload = function () {
+            // console.log(reload!);
+
+            // 讀取
+            checkReload.checked = sessionStorage.getItem("CheckReload") == "true";
+            reloadSec.value = sessionStorage.getItem("ReloadSec") ? sessionStorage.getItem("ReloadSec")
+                : delaySec;
+
+            // if (sessionStorage.getItem("CheckReload")) {
+            //     checkReload.checked = sessionStorage.getItem("CheckReload");
+            // };
+
+            // if (sessionStorage.getItem("ReloadSec")) {
+            //     reloadSec.value = sessionStorage.getItem("ReloadSec");
+            // };
+
+            SetUpdateInterval();
+
+        };
+
+
+        checkReload.addEventListener("change", () => {
+
+            // 儲存
+            sessionStorage.setItem("CheckReload", checkReload.checked);
+
+            SetUpdateInterval();
+        });
+
+        reloadSec.addEventListener("input", () => {
+
+            checkReload.checked = false;
+            sessionStorage.setItem("CheckReload", checkReload.checked);
+            sessionStorage.setItem("ReloadSec", reloadSec.value);
+        });
+
+        let intervalId = null;
+        function SetUpdateInterval() {
+            if (checkReload.checked) {
+                console.log("start reload!!!!");
+                let sec = Number(reloadSec.value) * 1000;
+                // 取得對應 Interval Id
+                intervalId = setInterval((() => {
+                    window.location.reload();
+                }), sec);
+            } else {
+                // 清除 Interval
+                clearInterval(intervalId);
+            };
+
+        };
+
+
+    </script>
 
 </body>
 

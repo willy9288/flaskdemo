@@ -1,6 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from datetime import datetime
-from scrape import scrape_stocks, scrape_pm25
+from scrape import scrape_stocks, scrape_pm25, get_pm25_json
+import json
 
 # print(__name__)
 
@@ -83,18 +84,53 @@ def get_stocks():
     return render_template("stocks.html", dts=datas)
 
 
-@app.route("/pm25")
+@app.route("/pm25", methods=["GET", "POST"])
 def get_pm25():
     # print(scrape_pm25())
+
+    # 前端要求 GET
+    print(request.args)
+    # 後端要求 POST
+    print(request.form)
     today = datetime.now()
     # print(today)
-    columns, values = scrape_pm25()
+
+    sort = False
+    ascend = True
+    if request.method == "POST":
+        # 判斷是否按下排序按鈕
+        if "sort" in request.form:
+            # print("sort!!!!")
+
+            # 取得 select的 option
+            sort = True
+            ascend = True if request.form.get("sort") == "true" else False
+            # print(ascend)
+
+    columns, values = scrape_pm25(sort, ascend)
     data = {
         "columns": columns,
         "values": values,
         "today": today.strftime("%Y/%m/%d %H:%M:%S"),
     }
     return render_template("pm25.html", dt=data)
+
+
+@app.route("/pm25-data")
+def pm25_data():
+
+    try:
+        json_data = get_pm25_json()
+        return json.dumps(json_data, ensure_ascii=False)
+
+    except Exception as e:
+        print(e)
+        return json.dumps({"result": "failure", "exception": str(e)})
+
+
+@app.route("/pm25-chart")
+def pm25_chart():
+    return render_template("pm25-chart.html")
 
 
 app.run(debug=True)

@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import pandas as pd
 
 
 def scrape_stocks():
@@ -26,12 +27,19 @@ def scrape_stocks():
     return None
 
 
-def scrape_pm25():
+def scrape_pm25(sort=False, ascend=True):
     url = "https://data.moenv.gov.tw/api/v2/aqx_p_02?api_key=e8dd42e6-9b8b-43f8-991e-b3dee723a52d&limit=1000&sort=datacreationdate%20desc&format=JSON"
     try:
         datas = requests.get(url).json()["records"]
-        columns = list(datas[0].keys())
-        values = [list(data.values()) for data in datas]
+        df = pd.DataFrame(datas)
+        df["pm25"] = df["pm25"].apply(lambda x: eval(x))
+        if sort:
+            df = df.sort_values("pm25", ascending=ascend)
+
+        # columns = list(datas[0].keys())
+        # values = [list(data.values()) for data in datas]
+        columns = df.columns
+        values = df.values
 
         return columns, values
 
@@ -41,6 +49,16 @@ def scrape_pm25():
     return None, 404
 
 
+def get_pm25_json():
+    columns, values = scrape_pm25()
+    xdata = [value[0] for value in values]
+    ydata = [value[2] for value in values]
+    json_data = {"site": xdata, "pm25": ydata}
+
+    return json_data
+
+
 if __name__ == "__main__":
     # print(scrape_stocks())
-    print(scrape_pm25())
+    # print(scrape_pm25(sort=True, ascend=False))
+    print(get_pm25_json())
