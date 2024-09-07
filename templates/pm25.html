@@ -38,8 +38,9 @@
 <body>
     <h1>全省 PM 2.5資訊</h1>
     <h3>目前時間:{{dt["today"]}}</h3>
-    <a href="/">Home</a><br>
-    <form action="">
+    <a href="/">Home</a>
+    <a href="">Refresh</a>
+    <form action="" method="POST">
         <select name="sort" id="sort">
             <option value="true">由小到大</option>
             <option value="false">由大到小</option>
