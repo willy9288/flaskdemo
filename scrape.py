@@ -49,6 +49,16 @@ def scrape_pm25(sort=False, ascend=True):
     return None, 404
 
 
+def get_pm25_json():
+    columns, values = scrape_pm25()
+    xdata = [value[0] for value in values]
+    ydata = [value[2] for value in values]
+    json_data = {"site": xdata, "pm25": ydata}
+
+    return json_data
+
+
 if __name__ == "__main__":
     # print(scrape_stocks())
-    print(scrape_pm25(sort=True, ascend=False))
+    # print(scrape_pm25(sort=True, ascend=False))
+    print(get_pm25_json())
