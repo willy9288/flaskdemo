@@ -151,5 +151,4 @@ def six_pm25_chart():
 
 
 # app.run(debug=True)
-app.run(host=0.0.0.0)
-
+app.run(host="0.0.0.0")
