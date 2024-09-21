@@ -150,4 +150,6 @@ def six_pm25_chart():
     return render_template("six-pm25-chart.html")
 
 
-app.run(debug=True)
+# app.run(debug=True)
+app.run(host=0.0.0.0)
+
