@@ -7,16 +7,39 @@
     <title>PM25-Chart</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+    <style>
+        .higher {
+            background-color: #FFCC99;
+            width: 200px;
+            text-align: center;
+            color: #663366;
+            font-size: 24px;
+        }
+
+        .lower {
+            background-color: #FFCC99;
+            width: 200px;
+            text-align: center;
+            color: #663366;
+            font-size: 24px;
+        }
+    </style>
 </head>
 
 <body>
     <a href="/">Home</a>
 
-    <div id="highestSite">最高:</div>
-    <div id="highestP25">最高數值:</div>
-    <div id="lowestSite">最低:</div>
-    <div id="lowestP25">最低數值:</div>
+    <div class="higher">
+        最高:<span id="highestSite"></span>
+        <span id="highestP25"></span>
+    </div>
 
+    <div class="lower">
+        最低:<span id="lowestSite"></span>
+        <span id="lowestP25"></span>
+    </div>
+
+    <a href="">更新數據</a>
     <h1>PM25圖形繪製</h1>
     <div id="main" style="width: 700px;height:400px;"></div>
     <div id="six" style="width: 700px;height:400px;"></div>
@@ -24,6 +47,11 @@
     <script>
         const chart1 = echarts.init(document.getElementById('main'));
         const chart2 = echarts.init(document.getElementById('six'));
+
+        window.addEventListener("resize", () => {
+            chart1.resize();
+            chart2.resize();
+        });
 
 
         $.ajax(
@@ -52,7 +80,7 @@
                 success: (data) => {
                     console.log(data);
                     drawChart(chart2, data["site"], data["pm25"],
-                        title = "六都 pm2.5數據", "pm2.5", "#00CACA")
+                        title = "六都 pm2.5數據", "pm2.5", "#333333")
                 }
             }
         );
@@ -63,7 +91,7 @@
 
 
 
-        function drawChart(chart, xdata, ydata, title = "圖表", name = "數值", color = "#9F35FF") {
+        function drawChart(chart, xdata, ydata, title = "圖表", name = "數值", color = "#336699") {
 
             var option = {
                 title: {
