@@ -13,8 +13,11 @@
     <a href="/">Home</a>
     <h1>PM25圖形繪製</h1>
     <div id="main" style="width: 700px;height:400px;"></div>
+    <div id="six" style="width: 700px;height:400px;"></div>
 
     <script>
+        const chart1 = echarts.init(document.getElementById('main'));
+        const chart2 = echarts.init(document.getElementById('six'));
 
         $.ajax(
             {
@@ -23,7 +26,21 @@
                 dataType: "json",
                 success: (data) => {
                     console.log(data);
-                    drawChart(chart1, data["site"], data["pm25"], title = "全台 pm2.5數據")
+                    drawChart(chart1, data["site"], data["pm25"],
+                        title = "全台 pm2.5數據", "pm2.5")
+                }
+            }
+        );
+
+        $.ajax(
+            {
+                url: "/six-pm25-data",
+                type: "GET",
+                dataType: "json",
+                success: (data) => {
+                    console.log(data);
+                    drawChart(chart2, data["site"], data["pm25"],
+                        title = "六都 pm2.5數據", "pm2.5", "#00CACA")
                 }
             }
         );
@@ -32,9 +49,9 @@
         // $("h1").text("ABC");
         $("h1").css("text-align", "center");
 
-        var chart1 = echarts.init(document.getElementById('main'));
 
-        function drawChart(chart, xdata, ydata, title = "圖表", name = "數值") {
+
+        function drawChart(chart, xdata, ydata, title = "圖表", name = "數值", color = "#9F35FF") {
 
             var option = {
                 title: {
@@ -52,7 +69,10 @@
                     {
                         name: name,
                         type: 'bar',
-                        data: ydata
+                        data: ydata,
+                        itemStyle: {
+                            color: color
+                        }
                     }
                 ]
             };
