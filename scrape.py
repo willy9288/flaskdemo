@@ -27,12 +27,23 @@ def scrape_stocks():
     return None
 
 
+def convert_value(value):
+    try:
+        return eval(value)
+    except:
+        return None
+
+
 def scrape_pm25(sort=False, ascend=True):
     url = "https://data.moenv.gov.tw/api/v2/aqx_p_02?api_key=e8dd42e6-9b8b-43f8-991e-b3dee723a52d&limit=1000&sort=datacreationdate%20desc&format=JSON"
     try:
         datas = requests.get(url).json()["records"]
         df = pd.DataFrame(datas)
-        df["pm25"] = df["pm25"].apply(lambda x: eval(x))
+        # df["pm25"] = df["pm25"].apply(lambda x: eval(x))
+        # 將非正常數值轉換成 None
+        df["pm25"] = df["pm25"].apply(convert_value)
+        # 移除有 Nono的數據
+        df = df.dropna()
         if sort:
             df = df.sort_values("pm25", ascending=ascend)
 
